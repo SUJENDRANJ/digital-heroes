@@ -4,9 +4,10 @@
   "description": "",
   "main": "server.js",
   "scripts": {
+    "seed": "node seedCharities.js",
     "start": "node server.js",
-    "server": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "server": "nodemon server.js",
+    "start:prod": "npm run seed && npm start"
   },
   "keywords": [],
   "author": "",
