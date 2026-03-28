@@ -20,7 +20,11 @@ const Login = () => {
     try {
       const response = await api.post('/auth/login', { email, password });
       login(response.data.user, response.data.token);
-      navigate('/dashboard');
+      if (response.data.user.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/dashboard');
+      }
     } catch (err) {
       setError(err.response?.data?.message || 'Invalid credentials. Please try again.');
     } finally {

@@ -1,32 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
-import api from '../../services/api';
-import { UserPlus, Loader2 } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import api from "../../services/api";
+import { UserPlus, Loader2 } from "lucide-react";
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    charityId: '',
+    name: "",
+    email: "",
+    password: "",
+    charityId: "",
   });
   const [charities, setCharities] = useState([]);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   const { login } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCharities = async () => {
       try {
-        const response = await api.get('/charities');
+        const response = await api.get("/charities");
         // Backend returns: { success: true, charities: [...] }
         const charityData = response.data.charities || [];
         setCharities(Array.isArray(charityData) ? charityData : []);
       } catch (err) {
-        console.error('Failed to fetch charities', err);
+        console.error("Failed to fetch charities", err);
         setCharities([]);
       }
     };
@@ -39,18 +39,20 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setIsSubmitting(true);
 
     try {
-      const response = await api.post('/auth/register', {
+      const response = await api.post("/auth/register", {
         ...formData,
         charityPercentage: 10, // Default fixed percentage
       });
       login(response.data.user, response.data.token);
-      navigate('/dashboard');
+      navigate("/dashboard");
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed. Try again.');
+      setError(
+        err.response?.data?.message || "Registration failed. Try again.",
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -60,8 +62,12 @@ const Register = () => {
     <div className="flex min-h-screen items-center justify-center bg-neutral-950 px-4 py-12">
       <div className="w-full max-w-md space-y-8 rounded-2xl border border-neutral-800 bg-neutral-900 p-8 shadow-2xl">
         <div className="text-center">
-          <h2 className="text-3xl font-extrabold tracking-tight text-white">Join the Platform</h2>
-          <p className="mt-2 text-sm text-neutral-400">Set up your account to start contributing</p>
+          <h2 className="text-3xl font-extrabold tracking-tight text-white">
+            Join the Platform
+          </h2>
+          <p className="mt-2 text-sm text-neutral-400">
+            Set up your account to start contributing
+          </p>
         </div>
 
         <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
@@ -70,7 +76,7 @@ const Register = () => {
               {error}
             </div>
           )}
-          
+
           <div className="space-y-4">
             <div>
               <label className="block text-xs font-medium uppercase tracking-wider text-neutral-500 mb-1.5 ml-1">
@@ -125,12 +131,15 @@ const Register = () => {
                 value={formData.charityId}
                 onChange={handleChange}
               >
-                <option value="" disabled>Choose a cause...</option>
-                {Array.isArray(charities) && charities.map((charity) => (
-                  <option key={charity._id} value={charity._id}>
-                    {charity.name}
-                  </option>
-                ))}
+                <option value="" disabled>
+                  Choose a cause...
+                </option>
+                {Array.isArray(charities) &&
+                  charities.map((charity) => (
+                    <option key={charity._id} value={charity._id}>
+                      {charity.name}
+                    </option>
+                  ))}
               </select>
             </div>
           </div>
@@ -152,8 +161,11 @@ const Register = () => {
         </form>
 
         <p className="text-center text-sm text-neutral-500">
-          Already have an account?{' '}
-          <Link to="/login" className="font-medium text-emerald-500 hover:text-emerald-400">
+          Already have an account?{" "}
+          <Link
+            to="/login"
+            className="font-medium text-emerald-500 hover:text-emerald-400"
+          >
             Sign in
           </Link>
         </p>
